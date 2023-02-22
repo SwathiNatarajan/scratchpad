@@ -7,10 +7,13 @@ import java.util.Random;
 import java.util.concurrent.BrokenBarrierException;
 import java.util.concurrent.CyclicBarrier;
 
+
+//-- Cyclic barrier
+//       -- waits until a certain task is completed by other threads
+//	   -- thread needs to call await until the barrier point is reached.
 public class CyclicBarrierDemo {
 
     private CyclicBarrier cyclicBarrier;
-
     private final Random random = new Random();
     private int PARTIAL_RESULTS;
     private int WORKERS;

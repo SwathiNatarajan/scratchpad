@@ -1,5 +1,6 @@
 package cache;
 
+import java.util.Deque;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -13,6 +14,9 @@ import java.util.Map;
 class LeastRecentlyUsedCache {
 
     Map<Integer, Integer> cache;
+    // add head and also can remove tail.
+    // used in fork and join
+    Deque deque;
     ListNode head;
     ListNode tail;
     int capacity;

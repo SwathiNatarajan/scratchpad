@@ -14,7 +14,7 @@ public class BinaryTreeProblems {
 
         if (root == null)
             return result;
-
+        // store in queue
         Queue<TreeNode> q = new LinkedList<TreeNode>();
 
         q.add(root);
