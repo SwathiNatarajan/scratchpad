@@ -12,9 +12,10 @@ public class DiningPhilosopherProblem {
 
         private Semaphore semaphore = new Semaphore(1);
 
-        public void getFork() {
+        public boolean getFork() {
             try {
                 semaphore.acquire();
+                return true;
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
@@ -41,7 +42,7 @@ public class DiningPhilosopherProblem {
         public void eat() {
             try {
                 int sleepTime = ThreadLocalRandom.current().nextInt(0, 1000);
-                System.out.println("philosopher " + (number + 1) + " eats for " + sleepTime);
+                System.out.println("philosopher " + (number) + " eats for " + sleepTime);
                 Thread.sleep(sleepTime);
             } catch (Exception e) {
                 e.printStackTrace(System.out);
@@ -51,28 +52,35 @@ public class DiningPhilosopherProblem {
         @Override
         public void run() {
             while (true) {
-                leftFork.getFork();
-                rightFork.getFork();
-                eat();
-                leftFork.releaseFork();
-                rightFork.releaseFork();
+                if (leftFork.getFork()) {
+                    if (rightFork.getFork()) {
+                        eat();
+                        leftFork.releaseFork();
+                        rightFork.releaseFork();
+                    }
+                }
             }
         }
     }
 
-    public void runSimulation() {
-        int numOfPhils = 5;
-        Fork[] forks = new Fork[numOfPhils];
-        ExecutorService executorService = Executors.newFixedThreadPool(numOfPhils);
-        // incomplete!!
-        IntStream.of(numOfPhils).forEach(i -> executorService
-                .execute(new Philosopher
-                        (i, forks[i], forks[(i + 1) % numOfPhils])));
-    }
+        public void runSimulation() {
+            int numOfPhils = 5;
+            Fork[] forks = new Fork[numOfPhils];
+            for (int i = 0; i < forks.length; i++) {
+                forks[i] = new Fork();
+            }
 
-    public static void main(String[] args) {
-        DiningPhilosopherProblem problem = new DiningPhilosopherProblem();
-        problem.runSimulation();
-    }
+            ExecutorService executorService = Executors.newFixedThreadPool(10);
+            // incomplete!!
+            for (int i = 0; i < numOfPhils ; i++) {
+                executorService
+                        .execute(new Philosopher
+                                (i, forks[i], forks[(i + 1) % numOfPhils]));
+            }
+        }
 
+        public static void main(String[] args) {
+            DiningPhilosopherProblem problem = new DiningPhilosopherProblem();
+            problem.runSimulation();
+        }
 }

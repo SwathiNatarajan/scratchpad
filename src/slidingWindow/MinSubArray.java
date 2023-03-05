@@ -28,4 +28,23 @@ public class MinSubArray {
         return minLen == Integer.MAX_VALUE ? 0 : minLen;
     }
 
+    // https://leetcode.com/problems/container-with-most-water/description/
+    public int maxArea(int[] height) {
+        int start = 0,
+                end = height.length - 1,
+                maxArea = Integer.MIN_VALUE,
+                area;
+        while (start < end) {
+            if (height[start] <= height[end]) {
+                area = height[start] * (end - start);
+                // start is this is the maximum water possible
+                start++;
+            } else {
+                area = height[end] * (end - start);
+                end--;
+            }
+            maxArea = Math.max(maxArea, area);
+        }
+        return maxArea;
+    }
 }
