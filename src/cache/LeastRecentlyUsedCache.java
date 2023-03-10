@@ -3,6 +3,7 @@ package cache;
 import java.util.Deque;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.LinkedBlockingDeque;
 
 
 /**
@@ -16,7 +17,7 @@ class LeastRecentlyUsedCache {
     Map<Integer, Integer> cache;
     // add head and also can remove tail.
     // used in fork and join
-    Deque deque;
+    Deque<Integer> deque;
     ListNode head;
     ListNode tail;
     int capacity;
@@ -34,6 +35,7 @@ class LeastRecentlyUsedCache {
     public LeastRecentlyUsedCache(int capacity) {
         cache = new HashMap<Integer, Integer>(capacity);
         this.capacity = capacity;
+        deque = new LinkedBlockingDeque<>();
     }
 
     void add(int val) {
@@ -47,6 +49,7 @@ class LeastRecentlyUsedCache {
             head = node;
             head.prev = null;
         }
+        deque.add(val);
     }
 
     int removeLast() {
@@ -56,7 +59,8 @@ class LeastRecentlyUsedCache {
             tail = tail.prev;
             tail.next = null;
         }
-        return last;
+      //  return last;
+        return deque.removeLast();
     }
 
     void findAndMakeHead(int val) {
@@ -86,6 +90,9 @@ class LeastRecentlyUsedCache {
             }
             temp = temp.next;
         }
+
+        deque.remove(val);
+        deque.addFirst(val);
     }
 
     public int get(int key) {

@@ -37,7 +37,7 @@ public class MinSubArray {
         while (start < end) {
             if (height[start] <= height[end]) {
                 area = height[start] * (end - start);
-                // start is this is the maximum water possible
+                // start is the maximum water possible
                 start++;
             } else {
                 area = height[end] * (end - start);
@@ -46,5 +46,18 @@ public class MinSubArray {
             maxArea = Math.max(maxArea, area);
         }
         return maxArea;
+    }
+
+    public int maxSubArray(int[] nums) {
+        int max = Integer.MIN_VALUE;
+        int currMax = 0;
+        for (int num : nums) {
+            currMax += num;
+            max = Math.max(currMax, max);
+            if (currMax < 0) {
+                currMax = 0;
+            }
+        }
+        return max;
     }
 }
